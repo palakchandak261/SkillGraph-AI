@@ -1,0 +1,162 @@
+{
+  "generated_at": "2026-10-14T09:10:01.245789",
+  "total_records": 2692,
+  "total_columns": 32,
+  "columns": [
+    "job_id",
+    "company_id",
+    "title",
+    "description",
+    "max_salary",
+    "med_salary",
+    "min_salary",
+    "pay_period",
+    "formatted_work_type",
+    "location",
+    "applies",
+    "original_listed_time",
+    "remote_allowed",
+    "views",
+    "job_posting_url",
+    "application_url",
+    "application_type",
+    "expiry",
+    "closed_time",
+    "formatted_experience_level",
+    "skills_desc",
+    "listed_time",
+    "posting_domain",
+    "sponsored",
+    "work_type",
+    "currency",
+    "compensation_type",
+    "scraped",
+    "original_title",
+    "normalized_title",
+    "original_location",
+    "normalized_location"
+  ],
+  "duplicates": 308,
+  "duplicate_rate": 10.27,
+  "missing_values": {
+    "company_id": {
+      "count": 44,
+      "percentage": 1.63
+    },
+    "max_salary": {
+      "count": 1772,
+      "percentage": 65.82
+    },
+    "med_salary": {
+      "count": 2515,
+      "percentage": 93.42
+    },
+    "min_salary": {
+      "count": 1772,
+      "percentage": 65.82
+    },
+    "pay_period": {
+      "count": 2692,
+      "percentage": 100.0
+    },
+    "applies": {
+      "count": 1705,
+      "percentage": 63.34
+    },
+    "remote_allowed": {
+      "count": 2351,
+      "percentage": 87.33
+    },
+    "views": {
+      "count": 901,
+      "percentage": 33.47
+    },
+    "application_url": {
+      "count": 602,
+      "percentage": 22.36
+    },
+    "closed_time": {
+      "count": 2653,
+      "percentage": 98.55
+    },
+    "formatted_experience_level": {
+      "count": 589,
+      "percentage": 21.88
+    },
+    "skills_desc": {
+      "count": 2663,
+      "percentage": 98.92
+    },
+    "posting_domain": {
+      "count": 621,
+      "percentage": 23.07
+    },
+    "currency": {
+      "count": 1595,
+      "percentage": 59.25
+    },
+    "compensation_type": {
+      "count": 1595,
+      "percentage": 59.25
+    }
+  },
+  "completeness": 72.06,
+  "date_coverage": {
+    "column": "original_listed_time",
+    "start": "2023-10-09 22:20:00",
+    "end": "2023-11-04 09:26:40",
+    "months": 0
+  },
+  "description_stats": {
+    "mean_length": 4059,
+    "median_length": 3709,
+    "min_length": 57,
+    "max_length": 19036
+  },
+  "pipeline_log": [
+    {
+      "timestamp": "2026-10-14T09:10:00.254333",
+      "stage": "standardize",
+      "message": "Standardized 28 column names",
+      "records_in": 3000,
+      "records_out": 3000
+    },
+    {
+      "timestamp": "2026-10-14T09:10:00.266393",
+      "stage": "validate_types",
+      "message": "Data types validated",
+      "records_in": 3000,
+      "records_out": 3000
+    },
+    {
+      "timestamp": "2026-10-14T09:10:00.993993",
+      "stage": "normalize_text",
+      "message": "Text encoding normalized",
+      "records_in": 3000,
+      "records_out": 3000
+    },
+    {
+      "timestamp": "2026-10-14T09:10:01.098854",
+      "stage": "dedup",
+      "message": "Removed 308 duplicates (10.3%)",
+      "records_in": 3000,
+      "records_out": 2692
+    },
+    {
+      "timestamp": "2026-10-14T09:10:01.106911",
+      "stage": "handle_missing",
+      "message": "Dropped 0 rows with no title/description",
+      "records_in": 2692,
+      "records_out": 2692
+    },
+    {
+      "timestamp": "2026-10-14T09:10:01.133258",
+      "stage": "normalize_fields",
+      "message": "Titles and locations normalized",
+      "records_in": 2692,
+      "records_out": 2692
+    }
+  ],
+  "duplicate_count": 308,
+  "missing_description_dropped": 0
+}

@@ -1,0 +1,296 @@
+{
+  "manifest_version": "1.0.0",
+  "project": "SkillGraph AI",
+  "created_at": "2026-10-14T08:00:00Z",
+  "last_updated": "2026-10-14T08:40:08.710859Z",
+  "datasets": {
+    "dataset_a_linkedin": {
+      "dataset_key": "dataset_a_linkedin",
+      "name": "LinkedIn Job Postings (2023-2024)",
+      "alias": "linkedin",
+      "processing_status": "present_local",
+      "source_url": "huggingface:xanderios/linkedin-job-postings",
+      "official_url": "https://www.kaggle.com/datasets/arshkon/linkedin-job-postings",
+      "license_name": "Kaggle Community Guidelines / Open Research Access",
+      "license_url": "https://www.kaggle.com/datasets/arshkon/linkedin-job-postings",
+      "target_directory": "data/raw/linkedin_jobs",
+      "files_present_count": 1,
+      "files_expected_count": 9,
+      "files": [
+        {
+          "file_name": "job_postings.csv",
+          "relative_path": "data/raw/linkedin_jobs/job_postings.csv",
+          "size_bytes": 134845243,
+          "size_human": "128.6 MB",
+          "sha256": "5c49550dd812ac5559d0ea835adaa49994e7a2c03a256c18012d62ae51eac551",
+          "row_count": 33246,
+          "column_count": 28,
+          "columns": [
+            "job_id",
+            "company_id",
+            "title",
+            "description",
+            "max_salary",
+            "med_salary",
+            "min_salary",
+            "pay_period",
+            "formatted_work_type",
+            "location",
+            "applies",
+            "original_listed_time",
+            "remote_allowed",
+            "views",
+            "job_posting_url",
+            "application_url",
+            "application_type",
+            "expiry",
+            "closed_time",
+            "formatted_experience_level",
+            "skills_desc",
+            "listed_time",
+            "posting_domain",
+            "sponsored",
+            "work_type",
+            "currency",
+            "compensation_type",
+            "scraped"
+          ],
+          "date_coverage": {
+            "start": "1.69691E+12",
+            "end": "1699139828"
+          },
+          "inspected_at": "2026-10-14T08:40:08.262625Z",
+          "description": "job_postings.csv",
+          "is_required": true
+        }
+      ],
+      "manual_instructions": "",
+      "updated_at": "2026-10-14T08:38:00.200865Z"
+    },
+    "dataset_b_esco": {
+      "dataset_key": "dataset_b_esco",
+      "name": "ESCO Classification (v1.2.0 / v1.1.1)",
+      "alias": "esco",
+      "processing_status": "missing",
+      "source_url": "https://ec.europa.eu/esco/portal/download",
+      "official_url": "https://ec.europa.eu/esco/portal/download",
+      "license_name": "European Commission Open Data / CC BY 4.0 compatible",
+      "license_url": "https://ec.europa.eu/esco/portal/licence",
+      "target_directory": "data/raw/esco",
+      "files_present_count": 0,
+      "files_expected_count": 8,
+      "files": []
+    },
+    "dataset_c_onet": {
+      "dataset_key": "dataset_c_onet",
+      "name": "O*NET Database",
+      "alias": "onet",
+      "processing_status": "present_local",
+      "source_url": "https://www.onetcenter.org/dl_files/database/db_31_0_text.zip",
+      "official_url": "https://www.onetcenter.org/database.html",
+      "license_name": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      "license_url": "https://www.onetcenter.org/license_db.html",
+      "target_directory": "data/raw/onet",
+      "files_present_count": 7,
+      "files_expected_count": 10,
+      "files": [
+        {
+          "file_name": "Essential Skills.txt",
+          "relative_path": "data/raw/onet/Essential Skills.txt",
+          "size_bytes": 1567178,
+          "size_human": "1.5 MB",
+          "sha256": "91ef60f7e43231136d08e8234f1624883a0ee7b951510d11851c693a2f8edea9",
+          "row_count": 18200,
+          "column_count": 13,
+          "columns": [
+            "O*NET-SOC Code",
+            "Element ID",
+            "Element Name",
+            "Scale ID",
+            "Data Value",
+            "N",
+            "Standard Error",
+            "Lower CI Bound",
+            "Upper CI Bound",
+            "Recommend Suppress",
+            "Not Relevant",
+            "Date",
+            "Domain Source"
+          ],
+          "date_coverage": {
+            "start": "07/2011",
+            "end": "08/2026"
+          },
+          "inspected_at": "2026-10-14T08:40:08.288583Z",
+          "description": "Essential Skills.txt",
+          "is_required": true
+        },
+        {
+          "file_name": "Software Skills.txt",
+          "relative_path": "data/raw/onet/Software Skills.txt",
+          "size_bytes": 2496686,
+          "size_human": "2.4 MB",
+          "sha256": "3fd63fb00251af89bf55eb1d24986e654ff61d0e5214fc238fbb56da7b4c4f4c",
+          "row_count": 31821,
+          "column_count": 6,
+          "columns": [
+            "O*NET-SOC Code",
+            "Workplace Example",
+            "Element ID",
+            "Element Name",
+            "Hot Technology",
+            "In Demand"
+          ],
+          "date_coverage": {
+            "start": null,
+            "end": null
+          },
+          "inspected_at": "2026-10-14T08:40:08.322099Z",
+          "description": "Software Skills.txt",
+          "is_required": true
+        },
+        {
+          "file_name": "Occupation Data.txt",
+          "relative_path": "data/raw/onet/Occupation Data.txt",
+          "size_bytes": 265794,
+          "size_human": "259.6 KB",
+          "sha256": "63e6029d3d30ff5c7cf39b5304a733b77a409e01c65ae7095fe92f6d18d74a66",
+          "row_count": 1016,
+          "column_count": 3,
+          "columns": [
+            "O*NET-SOC Code",
+            "Title",
+            "Description"
+          ],
+          "date_coverage": {
+            "start": null,
+            "end": null
+          },
+          "inspected_at": "2026-10-14T08:40:08.325936Z",
+          "description": "Occupation Data.txt",
+          "is_required": true
+        },
+        {
+          "file_name": "Knowledge.txt",
+          "relative_path": "data/raw/onet/Knowledge.txt",
+          "size_bytes": 5710599,
+          "size_human": "5.4 MB",
+          "sha256": "8a1ae01ed9c54de80a9049a635b43668c7f8b67cf7dbd2b349d795e6c6a7d624",
+          "row_count": 60060,
+          "column_count": 13,
+          "columns": [
+            "O*NET-SOC Code",
+            "Element ID",
+            "Element Name",
+            "Scale ID",
+            "Data Value",
+            "N",
+            "Standard Error",
+            "Lower CI Bound",
+            "Upper CI Bound",
+            "Recommend Suppress",
+            "Not Relevant",
+            "Date",
+            "Domain Source"
+          ],
+          "date_coverage": {
+            "start": "08/2021",
+            "end": "08/2026"
+          },
+          "inspected_at": "2026-10-14T08:40:08.417277Z",
+          "description": "Knowledge.txt",
+          "is_required": false
+        },
+        {
+          "file_name": "Abilities.txt",
+          "relative_path": "data/raw/onet/Abilities.txt",
+          "size_bytes": 8710678,
+          "size_human": "8.3 MB",
+          "sha256": "c80469ecc7d303b821068628ddd937afab8d726b0bf632bee05aca7c5356fc61",
+          "row_count": 94640,
+          "column_count": 13,
+          "columns": [
+            "O*NET-SOC Code",
+            "Element ID",
+            "Element Name",
+            "Scale ID",
+            "Data Value",
+            "N",
+            "Standard Error",
+            "Lower CI Bound",
+            "Upper CI Bound",
+            "Recommend Suppress",
+            "Not Relevant",
+            "Date",
+            "Domain Source"
+          ],
+          "date_coverage": {
+            "start": "08/2021",
+            "end": "08/2026"
+          },
+          "inspected_at": "2026-10-14T08:40:08.550964Z",
+          "description": "Abilities.txt",
+          "is_required": false
+        },
+        {
+          "file_name": "Work Activities.txt",
+          "relative_path": "data/raw/onet/Work Activities.txt",
+          "size_bytes": 8921964,
+          "size_human": "8.5 MB",
+          "sha256": "7e308154c3d138b19f4b74956c6f5f20037abc2d441355ae13e1f6070a12ff7f",
+          "row_count": 74702,
+          "column_count": 13,
+          "columns": [
+            "O*NET-SOC Code",
+            "Element ID",
+            "Element Name",
+            "Scale ID",
+            "Data Value",
+            "N",
+            "Standard Error",
+            "Lower CI Bound",
+            "Upper CI Bound",
+            "Recommend Suppress",
+            "Not Relevant",
+            "Date",
+            "Domain Source"
+          ],
+          "date_coverage": {
+            "start": "08/2021",
+            "end": "08/2026"
+          },
+          "inspected_at": "2026-10-14T08:40:08.676575Z",
+          "description": "Work Activities.txt",
+          "is_required": false
+        },
+        {
+          "file_name": "Task Statements.txt",
+          "relative_path": "data/raw/onet/Task Statements.txt",
+          "size_bytes": 2772538,
+          "size_human": "2.6 MB",
+          "sha256": "aee1788c7ce2ebf19c1700bc4a1d7aa69a59965736d56a521945256df3f68d08",
+          "row_count": 18838,
+          "column_count": 7,
+          "columns": [
+            "O*NET-SOC Code",
+            "Task ID",
+            "Task",
+            "Task Type",
+            "Incumbents Responding",
+            "Date",
+            "Domain Source"
+          ],
+          "date_coverage": {
+            "start": "06/2006",
+            "end": "11/2020"
+          },
+          "inspected_at": "2026-10-14T08:40:08.710828Z",
+          "description": "Task Statements.txt",
+          "is_required": false
+        }
+      ],
+      "manual_instructions": "",
+      "updated_at": "2026-10-14T08:34:39.313758Z"
+    }
+  }
+}
