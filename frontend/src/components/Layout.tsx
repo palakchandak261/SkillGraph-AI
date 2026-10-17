@@ -17,22 +17,36 @@ import {
   ChevronRight,
   Sparkles,
   ArrowRight,
+  BarChart2,
+  Briefcase,
+  Radar,
+  Sliders,
+  GitFork,
+  FolderGit2,
+  ShieldCheck,
 } from 'lucide-react';
 import { useStudent } from '../context/StudentContext';
 
 const studentNavItems = [
   { to: '/', icon: Home, label: 'Home' },
+  { to: '/dashboard', icon: BarChart2, label: 'Market Dashboard' },
   { to: '/careers', icon: Compass, label: 'Explore Careers' },
   { to: '/profile', icon: Brain, label: 'My Skills' },
-  { to: '/gap-analysis', icon: Target, label: 'Skill Gap' },
+  { to: '/gap-analysis', icon: Target, label: 'Skill Gap & Résumé' },
   { to: '/roadmap', icon: Milestone, label: 'Learning Roadmap' },
+  { to: '/opportunities', icon: Briefcase, label: 'Opportunity Matcher' },
+  { to: '/simulator', icon: Sliders, label: 'What-If Simulator' },
+  { to: '/transferable', icon: GitFork, label: 'Transferable Skills' },
+  { to: '/projects', icon: FolderGit2, label: 'AI Project Generator' },
+  { to: '/future-radar', icon: Radar, label: 'Future Skill Radar' },
   { to: '/alternatives', icon: Shuffle, label: 'Career Alternatives' },
   { to: '/graph', icon: Network, label: 'Career Graph' },
   { to: '/progress', icon: Trophy, label: 'My Progress' },
 ];
 
 const systemNavItems = [
-  { to: '/system/overview', icon: LayoutDashboard, label: 'Market Overview' },
+  { to: '/system/admin', icon: ShieldCheck, label: 'Data Quality & Admin' },
+  { to: '/system/overview', icon: LayoutDashboard, label: 'System Overview' },
   { to: '/system/data', icon: Database, label: 'Data Provenance' },
   { to: '/system/pipeline', icon: Settings, label: 'Pipeline Telemetry' },
   { to: '/system/evaluation', icon: FlaskConical, label: 'Model Benchmarks' },

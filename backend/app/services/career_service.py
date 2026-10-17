@@ -766,7 +766,23 @@ class CareerService:
             return []
 
         norm_candidate = {s.lower().strip() for s in candidate_skills}
-        all_occs = db.query(Occupation).all()
+        cand_skill_objs = db.query(Skill.id).filter(func.lower(Skill.canonical_name).in_(norm_candidate)).all()
+        cand_skill_ids = [s[0] for s in cand_skill_objs]
+
+        if cand_skill_ids:
+            cand_occ_ids = [
+                row[0] for row in (
+                    db.query(OccupationSkill.occupation_id)
+                    .filter(OccupationSkill.skill_id.in_(cand_skill_ids))
+                    .group_by(OccupationSkill.occupation_id)
+                    .order_by(func.count(OccupationSkill.skill_id).desc())
+                    .limit(45)
+                    .all()
+                )
+            ]
+            all_occs = db.query(Occupation).filter(Occupation.id.in_(cand_occ_ids)).all()
+        else:
+            all_occs = db.query(Occupation).limit(30).all()
 
         matches = []
         for occ in all_occs:

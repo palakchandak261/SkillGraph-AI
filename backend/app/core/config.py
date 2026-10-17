@@ -2,7 +2,7 @@
 
 import json
 from pathlib import Path
-from typing import Any, List, Union
+from typing import Any, List, Optional, Union
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -94,6 +94,14 @@ class Settings(BaseSettings):
     # Server configuration
     HOST: str = "0.0.0.0"
     PORT: int = 8000
+
+    # External Data Provider Configurations
+    ADZUNA_APP_ID: Optional[str] = None
+    ADZUNA_APP_KEY: Optional[str] = None
+    RAPIDAPI_KEY: Optional[str] = None
+    RAPIDAPI_HOST: str = "jsearch.p.rapidapi.com"
+    ONET_USERNAME: Optional[str] = None
+    ONET_PASSWORD: Optional[str] = None
 
     model_config = SettingsConfigDict(
         env_file=".env",

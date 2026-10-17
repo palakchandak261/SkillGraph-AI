@@ -584,3 +584,91 @@ class CareerGraphResponse(BaseModel):
     total_nodes: int
     total_edges: int
 
+
+# -----------------------------------------------------------------------------
+# Innovative Features & Opportunity Matcher Schemas
+# -----------------------------------------------------------------------------
+class OpportunityMatchRequest(BaseModel):
+    candidate_skills: List[str] = Field(default_factory=list)
+    role_filter: Optional[str] = None
+    location_filter: Optional[str] = None
+    min_match_score: float = 20.0
+    limit: int = 15
+    offset: int = 0
+
+
+class OpportunityMatchItem(BaseModel):
+    job_id: int
+    title: str
+    company: str
+    location: str
+    employment_type: str
+    salary_range: Optional[str] = None
+    posted_date: Optional[str] = None
+    source_name: str
+    external_url: Optional[str] = None
+    match_score: float
+    match_tier: str
+    matched_skills: List[str]
+    matched_count: int
+    missing_skills: List[str]
+    missing_count: int
+    total_job_skills: int
+    relevance_explanation: str
+
+
+class OpportunityMatchResponse(BaseModel):
+    total_matched: int
+    matches: List[OpportunityMatchItem]
+    candidate_skills_evaluated: Optional[List[str]] = None
+    message: Optional[str] = None
+
+
+class ResumeParseRequest(BaseModel):
+    resume_text: str
+    experience_level_hint: Optional[str] = None
+
+
+class ExtractedSkillItem(BaseModel):
+    skill_id: int
+    skill_name: str
+    category: str
+    proficiency: str
+    confidence: float
+    occurrences: int
+    context_snippet: str
+
+
+class ResumeParseResponse(BaseModel):
+    extracted_skills: List[ExtractedSkillItem]
+    total_skills_found: int
+    word_count: int
+    inferred_experience_level: str
+    processing_time_ms: float
+    privacy_notice: str
+
+
+class WhatIfRequest(BaseModel):
+    current_skills: List[str]
+    simulated_skills: List[str]
+    target_career_id: int
+
+
+class SkillEvidenceRequest(BaseModel):
+    skill_name: str
+    evidence_type: str = "project_description"
+    evidence_text: str
+
+
+class LearningROIOptimizerRequest(BaseModel):
+    candidate_skills: List[str]
+    target_career_id: int
+    weekly_hours: int = 10
+
+
+class ProjectGeneratorRequest(BaseModel):
+    target_career_title: str
+    target_skills: List[str]
+    experience_level: str = "student"
+
+

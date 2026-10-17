@@ -97,8 +97,21 @@ from backend.app.schemas.schemas import (
     StudentSkillInput,
     TrendDataPoint,
     TrendPointItem,
+    OpportunityMatchRequest,
+    OpportunityMatchResponse,
+    ResumeParseRequest,
+    ResumeParseResponse,
+    WhatIfRequest,
+    SkillEvidenceRequest,
+    LearningROIOptimizerRequest,
+    ProjectGeneratorRequest,
 )
 from backend.app.services.career_service import career_service
+from backend.app.services.intelligence_features import intelligence_service
+from backend.app.services.opportunity_service import opportunity_service
+from backend.app.services.resume_service import resume_service
+from backend.app.services.data_quality_service import data_quality_service
+from backend.app.services.data_providers import provider_manager
 
 router = APIRouter()
 
@@ -1465,4 +1478,188 @@ def get_career_graph(
         return career_service.get_career_graph(db, career_id=career_id, student_skills=skills_list)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+
+# -----------------------------------------------------------------------------
+# Opportunity Matcher & Real Job Listings
+# -----------------------------------------------------------------------------
+@router.post("/opportunities/match", response_model=OpportunityMatchResponse, tags=["Opportunity Matcher"])
+def match_opportunities(
+    payload: OpportunityMatchRequest,
+    db: Session = Depends(get_db),
+):
+    """Match candidate skills against real job postings in the database."""
+    return opportunity_service.match_opportunities(
+        db,
+        candidate_skills=payload.candidate_skills,
+        role_filter=payload.role_filter,
+        location_filter=payload.location_filter,
+        min_match_score=payload.min_match_score,
+        limit=payload.limit,
+        offset=payload.offset,
+    )
+
+
+# -----------------------------------------------------------------------------
+# Privacy-Preserving Résumé Parser
+# -----------------------------------------------------------------------------
+@router.post("/resume/parse", response_model=ResumeParseResponse, tags=["Résumé Parser"])
+def parse_resume(
+    payload: ResumeParseRequest,
+    db: Session = Depends(get_db),
+):
+    """Extract candidate competencies from raw résumé text in-memory."""
+    return resume_service.extract_from_text(
+        db,
+        text=payload.resume_text,
+        user_experience_hint=payload.experience_level_hint,
+    )
+
+
+# -----------------------------------------------------------------------------
+# Market Intelligence Dashboard & Admin Data Quality
+# -----------------------------------------------------------------------------
+@router.get("/market/dashboard", tags=["Market Intelligence"])
+def get_market_dashboard(
+    role_filter: Optional[str] = Query(None),
+    location_filter: Optional[str] = Query(None),
+    industry_filter: Optional[str] = Query(None),
+    db: Session = Depends(get_db),
+):
+    """Retrieve comprehensive macro job market distributions, top skills, and recent postings."""
+    return data_quality_service.get_market_dashboard(
+        db,
+        role_filter=role_filter,
+        location_filter=location_filter,
+        industry_filter=industry_filter,
+    )
+
+
+@router.get("/data-quality/report", tags=["Data Quality & Admin"])
+def get_data_quality_report(db: Session = Depends(get_db)):
+    """Retrieve data confidence index, provider audit, and pipeline telemetry."""
+    return data_quality_service.get_data_quality_report(db)
+
+
+# -----------------------------------------------------------------------------
+# Innovative Intelligence Features Suite
+# -----------------------------------------------------------------------------
+@router.get("/features/early-warning", tags=["Innovative Features"])
+def get_early_warning_signals(
+    lookback_periods: int = Query(4, ge=2, le=12),
+    min_postings: int = Query(5, ge=1),
+    db: Session = Depends(get_db),
+):
+    """Feature 1: Detect significant velocity spikes or declines in skill demand."""
+    return intelligence_service.get_early_warning_signals(
+        db, lookback_periods=lookback_periods, min_postings=min_postings
+    )
+
+
+@router.get("/features/career-bridges/{career_id}", tags=["Innovative Features"])
+def get_career_bridges(
+    career_id: int,
+    limit: int = Query(6, ge=1, le=15),
+    db: Session = Depends(get_db),
+):
+    """Feature 2: Discover step-by-step career transition bridges sharing skills."""
+    try:
+        return intelligence_service.find_career_bridges(db, current_occupation_id=career_id, limit=limit)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.post("/features/what-if", tags=["Innovative Features"])
+def simulate_what_if(
+    payload: WhatIfRequest,
+    db: Session = Depends(get_db),
+):
+    """Feature 3: Simulate role coverage and unlocked jobs when acquiring hypothetical skills."""
+    try:
+        return intelligence_service.simulate_what_if(
+            db,
+            current_skills=payload.current_skills,
+            simulated_skills=payload.simulated_skills,
+            target_career_id=payload.target_career_id,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.post("/features/transferable-skills", tags=["Innovative Features"])
+def detect_transferable_skills(
+    skills: List[str],
+    db: Session = Depends(get_db),
+):
+    """Feature 4: Detect hidden/transferable skills from declared competencies with rationale."""
+    return intelligence_service.detect_transferable_skills(db, declared_skills=skills)
+
+
+@router.post("/features/evidence", tags=["Innovative Features"])
+def verify_skill_evidence(payload: SkillEvidenceRequest):
+    """Feature 5: Evaluate and associate declared skills with portfolio or project artifacts."""
+    return intelligence_service.evaluate_skill_evidence(
+        skill_name=payload.skill_name,
+        evidence_type=payload.evidence_type,
+        evidence_text=payload.evidence_text,
+    )
+
+
+@router.post("/features/roi-optimizer", tags=["Innovative Features"])
+def optimize_learning_roi(
+    payload: LearningROIOptimizerRequest,
+    db: Session = Depends(get_db),
+):
+    """Feature 6: Multi-factor learning priority & ROI optimizer factoring versatility and hours."""
+    try:
+        return intelligence_service.optimize_learning_priority(
+            db,
+            candidate_skills=payload.candidate_skills,
+            target_career_id=payload.target_career_id,
+            weekly_hours=payload.weekly_hours,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.post("/features/project-ideas", tags=["Innovative Features"])
+def generate_project_ideas(
+    payload: ProjectGeneratorRequest,
+    db: Session = Depends(get_db),
+):
+    """Feature 7: Generate portfolio project specifications with milestones and deliverables."""
+    return intelligence_service.generate_portfolio_projects(
+        db,
+        target_career_title=payload.target_career_title,
+        target_skills=payload.target_skills,
+        experience_level=payload.experience_level,
+    )
+
+
+@router.get("/features/skill-half-life/{skill_id}", tags=["Innovative Features"])
+def get_skill_half_life(
+    skill_id: int,
+    db: Session = Depends(get_db),
+):
+    """Feature 10: Skill demand stability, momentum, and half-life decay monitor."""
+    try:
+        return intelligence_service.get_skill_half_life(db, skill_id=skill_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+# -----------------------------------------------------------------------------
+# Data Providers Status & Live Tests
+# -----------------------------------------------------------------------------
+@router.get("/providers/status", tags=["Data Providers"])
+def get_providers_status():
+    """Check connectivity and configuration status for ESCO, Adzuna, ONET, and JSearch."""
+    return provider_manager.get_all_statuses()
+
+
+@router.get("/providers/test/{provider_key}", tags=["Data Providers"])
+def test_provider_endpoint(provider_key: str):
+    """Perform live test ping and sample retrieval for a specific provider."""
+    return provider_manager.test_provider(provider_key)
+
 

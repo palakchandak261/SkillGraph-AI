@@ -17,22 +17,32 @@ import {
   Info,
   Layers,
   Compass,
-  Zap,
   HelpCircle,
   Milestone,
+  FileText,
+  Upload,
+  X,
+  ShieldCheck,
+  Zap,
 } from 'lucide-react';
-import { analyzeStudentSkillGap } from '../services/api';
-import type { StudentSkillGapResult } from '../types';
+import { analyzeStudentSkillGap, parseResumeText } from '../services/api';
+import type { StudentSkillGapResult, ResumeParseResponse } from '../types';
 import { useStudent } from '../context/StudentContext';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
 
 export default function SkillGapAnalyzer() {
   const navigate = useNavigate();
-  const { targetCareer, studentSkills } = useStudent();
+  const { targetCareer, studentSkills, addSkill } = useStudent();
   const [result, setResult] = useState<StudentSkillGapResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Resume Modal State
+  const [resumeModalOpen, setResumeModalOpen] = useState(false);
+  const [resumeText, setResumeText] = useState('');
+  const [parsingResume, setParsingResume] = useState(false);
+  const [parsedData, setParsedData] = useState<ResumeParseResponse | null>(null);
 
   const careerId = targetCareer?.career_id || 1;
 
@@ -69,6 +79,33 @@ export default function SkillGapAnalyzer() {
     };
   }, [careerId, studentSkills]);
 
+  const handleParseResume = async () => {
+    if (!resumeText.trim()) return;
+    setParsingResume(true);
+    try {
+      const res = await parseResumeText({ resume_text: resumeText });
+      setParsedData(res.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setParsingResume(false);
+    }
+  };
+
+  const handleApplyParsedSkills = () => {
+    if (!parsedData) return;
+    parsedData.extracted_skills.forEach((s) => {
+      addSkill({
+        skill_name: s.skill_name,
+        proficiency: s.proficiency,
+        is_custom: false,
+      });
+    });
+    setResumeModalOpen(false);
+    setParsedData(null);
+    setResumeText('');
+  };
+
   if (loading) {
     return <LoadingSpinner message="Calculating multi-factor skill gap alignment and coverage score..." />;
   }
@@ -95,12 +132,23 @@ export default function SkillGapAnalyzer() {
           </p>
         </div>
 
-        <button
-          onClick={() => navigate('/roadmap')}
-          className="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all"
-        >
-          View Learning Roadmap <ArrowRight className="w-3.5 h-3.5" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setResumeModalOpen(true)}
+            className="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+          >
+            <Upload className="w-3.5 h-3.5 text-teal-600" />
+            <span>Upload / Paste Résumé</span>
+          </button>
+
+          <button
+            onClick={() => navigate('/roadmap')}
+            className="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+          >
+            <span>View Roadmap</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
 
       {/* Coverage Score & Highlight Cards */}
@@ -317,6 +365,123 @@ export default function SkillGapAnalyzer() {
           </table>
         </div>
       </div>
+
+      {/* Résumé Parsing Modal */}
+      {resumeModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2">
+                <FileText className="w-5 h-5 text-teal-600" />
+                <h3 className="text-base font-extrabold text-slate-900">
+                  Instant Résumé Skill Extraction
+                </h3>
+              </div>
+              <button
+                onClick={() => {
+                  setResumeModalOpen(false);
+                  setParsedData(null);
+                }}
+                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Privacy Assurance Banner */}
+            <div className="p-3 bg-teal-50/70 border border-teal-200 rounded-2xl flex items-start gap-2.5 text-xs text-teal-950">
+              <ShieldCheck className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
+              <span>
+                <strong>Privacy Guaranteed:</strong> Résumé text is processed entirely in-memory for competency identification
+                and is never permanently stored, indexed, or shared.
+              </span>
+            </div>
+
+            {!parsedData ? (
+              <div className="space-y-3">
+                <label className="text-xs font-bold text-slate-700 block">
+                  Paste Résumé or Bio Text:
+                </label>
+                <textarea
+                  rows={8}
+                  placeholder="Paste your resume work experience, skills section, or bio here (e.g. 'Software Engineer with experience in Python, FastAPI, Docker, and PostgreSQL...')"
+                  value={resumeText}
+                  onChange={(e) => setResumeText(e.target.value)}
+                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white resize-none"
+                />
+
+                <div className="flex justify-end gap-2 pt-2">
+                  <button
+                    onClick={() => setResumeModalOpen(false)}
+                    className="px-4 py-2 text-xs font-semibold text-slate-500 hover:text-slate-800"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleParseResume}
+                    disabled={parsingResume || !resumeText.trim()}
+                    className="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 disabled:opacity-50 text-white font-bold rounded-xl text-xs transition-colors shadow-xs flex items-center gap-2 cursor-pointer"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    <span>{parsingResume ? 'Extracting Skills...' : 'Extract Skills Now'}</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-xs font-bold text-slate-900 block">
+                      Found {parsedData.total_skills_found} Verified Skills
+                    </span>
+                    <span className="text-[11px] text-slate-400">
+                      Processed in {parsedData.processing_time_ms}ms ({parsedData.word_count} words analyzed)
+                    </span>
+                  </div>
+                  <span className="text-xs font-bold px-2.5 py-0.5 bg-slate-100 text-slate-700 rounded-full capitalize">
+                    Level: {parsedData.inferred_experience_level.replace('_', ' ')}
+                  </span>
+                </div>
+
+                <div className="max-h-60 overflow-y-auto space-y-2 border border-slate-100 rounded-2xl p-3 bg-slate-50">
+                  {parsedData.extracted_skills.map((sk) => (
+                    <div
+                      key={sk.skill_id}
+                      className="bg-white p-2.5 rounded-xl border border-slate-200 flex items-center justify-between text-xs"
+                    >
+                      <div>
+                        <span className="font-bold text-slate-900 block">{sk.skill_name}</span>
+                        <span className="text-[10px] text-slate-400">{sk.context_snippet}</span>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 font-bold text-[10px] border border-emerald-200 capitalize">
+                        {sk.proficiency}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex justify-between items-center pt-3 border-t border-slate-100">
+                  <button
+                    onClick={() => setParsedData(null)}
+                    className="text-xs text-slate-500 hover:text-slate-800 font-semibold"
+                  >
+                    &larr; Re-paste Résumé
+                  </button>
+
+                  <button
+                    onClick={handleApplyParsedSkills}
+                    className="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl text-xs transition-colors shadow-xs flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Apply {parsedData.total_skills_found} Skills to My Profile</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+

@@ -425,3 +425,262 @@ export interface CareerGraphPayload {
   total_edges: number;
 }
 
+export interface OpportunityMatchItem {
+  job_id: number;
+  title: string;
+  company: string;
+  location: string;
+  employment_type: string;
+  salary_range: string | null;
+  posted_date: string | null;
+  source_name: string;
+  external_url: string | null;
+  match_score: number;
+  match_tier: string;
+  matched_skills: string[];
+  matched_count: number;
+  missing_skills: string[];
+  missing_count: number;
+  total_job_skills: number;
+  relevance_explanation: string;
+}
+
+export interface OpportunityMatchResponse {
+  total_matched: number;
+  matches: OpportunityMatchItem[];
+  candidate_skills_evaluated?: string[];
+  message?: string;
+}
+
+export interface ExtractedSkillItem {
+  skill_id: number;
+  skill_name: string;
+  category: string;
+  proficiency: 'beginner' | 'intermediate' | 'advanced';
+  confidence: number;
+  occurrences: number;
+  context_snippet: string;
+}
+
+export interface ResumeParseResponse {
+  extracted_skills: ExtractedSkillItem[];
+  total_skills_found: number;
+  word_count: number;
+  inferred_experience_level: string;
+  processing_time_ms: number;
+  privacy_notice: string;
+}
+
+export interface EarlyWarningSignal {
+  skill_id: number;
+  skill_name: string;
+  category: string;
+  signal_type: 'surge_alert' | 'decline_warning' | 'momentum_shift' | 'stable';
+  urgency: 'high' | 'medium' | 'low';
+  headline: string;
+  explanation: string;
+  recent_share_pct: number;
+  baseline_share_pct: number;
+  relative_change_pct: number;
+  sample_postings: number;
+  reliability_warning: string | null;
+}
+
+export interface CareerBridge {
+  target_career_id: number;
+  target_title: string;
+  onet_code: string | null;
+  transfer_score: number;
+  jaccard_similarity: number;
+  feasibility: string;
+  estimated_bridging_effort: string;
+  shared_skills: string[];
+  shared_skills_count: number;
+  key_missing_skills: string[];
+  missing_skills_count: number;
+  posting_count: number;
+  transition_rationale: string;
+}
+
+export interface WhatIfResult {
+  target_career_id: number;
+  target_title: string;
+  baseline_coverage: number;
+  simulated_coverage: number;
+  coverage_gain_pct: number;
+  simulated_skills_added: string[];
+  skills_newly_satisfied: string[];
+  remaining_high_priority_gaps: string[];
+  baseline_matching_jobs_sample: number;
+  simulated_matching_jobs_sample: number;
+  newly_unlocked_jobs_count: number;
+  baseline_career_matches_count: number;
+  simulated_career_matches_count: number;
+  simulation_disclaimer: string;
+}
+
+export interface TransferableSkill {
+  declared_skill: string;
+  suggested_skill: string;
+  category: string;
+  transfer_confidence: number;
+  relationship_type: string;
+  rationale: string;
+  user_status: 'pending_confirmation' | 'accepted' | 'rejected';
+}
+
+export interface SkillEvidenceResult {
+  skill_name: string;
+  evidence_type: string;
+  evidence_strength: string;
+  confidence_score: number;
+  is_corroborated: boolean;
+  verification_explanation: string;
+  disclaimer: string;
+  verified_at: string;
+}
+
+export interface LearningROIOptimization {
+  rank: number;
+  skill_id: number;
+  skill_name: string;
+  category: string;
+  priority_score: number;
+  factor_breakdown: {
+    role_demand_weight: number;
+    role_importance_weight: number;
+    market_versatility_weight: number;
+    skill_gap_weight: number;
+  };
+  multi_role_presence: string;
+  estimated_study_hours: number;
+  estimated_duration_weeks: string;
+  learning_rationale: string;
+}
+
+export interface ProjectIdea {
+  id: string;
+  title: string;
+  difficulty: string;
+  primary_skills: string[];
+  objective: string;
+  scope: string;
+  milestones: string[];
+  deliverables: string[];
+  evaluation_criteria: string[];
+  job_evidence: string;
+}
+
+export interface SkillHalfLife {
+  skill_id: number;
+  skill_name: string;
+  status: string;
+  trajectory: string;
+  annualized_momentum_pct?: number;
+  estimated_half_life?: string | null;
+  obsolescence_risk?: string;
+  total_observed_periods?: number;
+  historical_mean_share_pct?: number;
+  message?: string;
+  disclaimer?: string;
+}
+
+export interface MarketDashboardData {
+  total_job_postings: number;
+  total_distinct_skills: number;
+  total_occupations: number;
+  date_range: {
+    start: string;
+    end: string;
+  };
+  top_in_demand_skills: {
+    skill_id: number;
+    skill_name: string;
+    category: string;
+    posting_count: number;
+    demand_share: number;
+  }[];
+  fast_growing_skills: {
+    skill_name: string;
+    growth_rate: string;
+    category: string;
+  }[];
+  declining_demand_skills: {
+    skill_name: string;
+    growth_rate: string;
+    category: string;
+  }[];
+  location_distribution: {
+    location: string;
+    count: number;
+  }[];
+  frequent_co_occurrences: {
+    skill_a: string;
+    skill_b: string;
+    co_occurrence_count: number;
+    relationship_type: string;
+  }[];
+  recent_postings: {
+    id: number;
+    title: string;
+    company: string;
+    location: string;
+    posted_date: string | null;
+    industry: string;
+  }[];
+  data_freshness: string;
+}
+
+export interface DataQualityReport {
+  market_confidence_index: number;
+  confidence_tier: string;
+  confidence_factors: {
+    sample_volume_score: number;
+    field_completeness_score: number;
+    nlp_extraction_coverage_score: number;
+    data_freshness_score: number;
+  };
+  records_audit: {
+    total_postings_evaluated: number;
+    duplicate_rate_pct: number;
+    missing_description_pct: number;
+    missing_company_pct: number;
+    missing_location_pct: number;
+    missing_posted_date_pct: number;
+    skill_extraction_coverage_pct: number;
+  };
+  registered_datasources: {
+    id: number;
+    name: string;
+    row_count: number;
+    file_size_mb: number;
+    license: string | null;
+    checksum: string | null;
+    status: string;
+    date_coverage: string;
+  }[];
+  recent_pipeline_telemetry: {
+    stage: string;
+    status: string;
+    records_processed: number;
+    records_output: number;
+    timestamp: string | null;
+  }[];
+  transparency_notice: string;
+}
+
+export interface DataProviderStatus {
+  provider: string;
+  provider_key: string;
+  category: string;
+  status: string;
+  status_code?: number;
+  requires_auth: boolean;
+  auth_provided?: boolean;
+  latency_ms?: number;
+  notes: string;
+  local_records?: number;
+  skills_mapped?: number;
+}
+
+

@@ -154,5 +154,85 @@ export const getCareerGraph = (careerId: number, studentSkills?: string[]) =>
     params: { student_skills: studentSkills?.join(',') },
   });
 
+// -----------------------------------------------------------------------------
+// Opportunity Matcher & Real Job Listings
+// -----------------------------------------------------------------------------
+export const matchOpportunities = (payload: {
+  candidate_skills: string[];
+  role_filter?: string;
+  location_filter?: string;
+  min_match_score?: number;
+  limit?: number;
+  offset?: number;
+}) => api.post<import('../types').OpportunityMatchResponse>('/opportunities/match', payload);
+
+// -----------------------------------------------------------------------------
+// Résumé Parser
+// -----------------------------------------------------------------------------
+export const parseResumeText = (payload: {
+  resume_text: string;
+  experience_level_hint?: string;
+}) => api.post<import('../types').ResumeParseResponse>('/resume/parse', payload);
+
+// -----------------------------------------------------------------------------
+// Market Intelligence & Admin Data Quality
+// -----------------------------------------------------------------------------
+export const getMarketDashboard = (params?: {
+  role_filter?: string;
+  location_filter?: string;
+  industry_filter?: string;
+}) => api.get<import('../types').MarketDashboardData>('/market/dashboard', { params });
+
+export const getDataQualityReport = () =>
+  api.get<import('../types').DataQualityReport>('/data-quality/report');
+
+// -----------------------------------------------------------------------------
+// Innovative Features Suite
+// -----------------------------------------------------------------------------
+export const getEarlyWarningSignals = (params?: { lookback_periods?: number; min_postings?: number }) =>
+  api.get<import('../types').EarlyWarningSignal[]>('/features/early-warning', { params });
+
+export const getCareerBridges = (careerId: number, limit: number = 6) =>
+  api.get<import('../types').CareerBridge[]>(`/features/career-bridges/${careerId}`, {
+    params: { limit },
+  });
+
+export const simulateWhatIf = (payload: {
+  current_skills: string[];
+  simulated_skills: string[];
+  target_career_id: number;
+}) => api.post<import('../types').WhatIfResult>('/features/what-if', payload);
+
+export const detectTransferableSkills = (skills: string[]) =>
+  api.post<import('../types').TransferableSkill[]>('/features/transferable-skills', skills);
+
+export const verifySkillEvidence = (payload: {
+  skill_name: string;
+  evidence_type: string;
+  evidence_text: string;
+}) => api.post<import('../types').SkillEvidenceResult>('/features/evidence', payload);
+
+export const optimizeLearningROI = (payload: {
+  candidate_skills: string[];
+  target_career_id: number;
+  weekly_hours?: number;
+}) => api.post<import('../types').LearningROIOptimization[]>('/features/roi-optimizer', payload);
+
+export const generateProjectIdeas = (payload: {
+  target_career_title: string;
+  target_skills: string[];
+  experience_level?: string;
+}) => api.post<import('../types').ProjectIdea[]>('/features/project-ideas', payload);
+
+export const getSkillHalfLife = (skillId: number) =>
+  api.get<import('../types').SkillHalfLife>(`/features/skill-half-life/${skillId}`);
+
+export const getProvidersStatus = () =>
+  api.get<import('../types').DataProviderStatus[]>('/providers/status');
+
+export const testProviderEndpoint = (providerKey: string) =>
+  api.get<any>(`/providers/test/${providerKey}`);
+
 export default api;
+
 
