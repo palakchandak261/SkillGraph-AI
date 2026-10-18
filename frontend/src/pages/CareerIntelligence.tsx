@@ -210,26 +210,36 @@ export default function CareerIntelligence() {
 
   return (
     <div className="space-y-8 pb-12">
-      {/* Top Search & Career Switcher Bar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3 w-full md:w-auto">
-          <div className="p-2.5 bg-teal-50 text-teal-600 rounded-xl">
-            <Compass className="w-5 h-5" />
+      {/* Step Indicator & Career Title Bar */}
+      <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="p-3 bg-gradient-to-br from-teal-500 to-teal-700 text-white rounded-2xl shadow-xs">
+            <Compass className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs text-slate-400 font-medium block">Active Dream Career</span>
-            <h1 className="text-base font-bold text-slate-800">{overview.title}</h1>
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-bold text-teal-700 bg-teal-50 border border-teal-200/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                Step 1 of 5: Explore Careers
+              </span>
+              {targetCareer?.career_id === activeId ? (
+                <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  Your Dream Career Goal
+                </span>
+              ) : null}
+            </div>
+            <h1 className="text-xl font-extrabold text-slate-900 mt-0.5">{overview.title}</h1>
           </div>
         </div>
 
         {/* Career Search Autocomplete */}
-        <div className="relative w-full md:w-96">
+        <div className="relative w-full md:w-80">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Switch career (e.g. Data Analyst, Cloud Engineer)..."
+            placeholder="Search another career..."
             className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all"
           />
           {searchSuggestions.length > 0 && (
@@ -242,7 +252,7 @@ export default function CareerIntelligence() {
                     setSearchQuery('');
                     setSearchSuggestions([]);
                   }}
-                  className="w-full px-3 py-2 text-left hover:bg-slate-50 flex items-center justify-between text-xs"
+                  className="w-full px-3 py-2 text-left hover:bg-slate-50 flex items-center justify-between text-xs cursor-pointer"
                 >
                   <span className="font-semibold text-slate-800">{item.title}</span>
                   <span className="text-[10px] text-teal-600 font-medium">{item.demand_status}</span>
@@ -252,19 +262,47 @@ export default function CareerIntelligence() {
           )}
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* Top Actions */}
+        <div className="flex flex-wrap items-center gap-2">
+          {targetCareer?.career_id !== activeId && (
+            <button
+              type="button"
+              onClick={() => {
+                setTargetCareer({
+                  career_id: overview.career_id,
+                  title: overview.title,
+                  onet_code: overview.onet_code,
+                  description: overview.description,
+                  posting_count: overview.posting_count,
+                  demand_status: overview.demand_status,
+                  match_type: 'selected',
+                  matched_alias: null,
+                });
+              }}
+              className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
+              title="Set this role as your dream career goal"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Set as My Dream Career</span>
+            </button>
+          )}
+
           <button
+            type="button"
             onClick={() => setIsComparing(!isComparing)}
-            className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
           >
-            <GitCompare className="w-4 h-4 text-slate-500" />
-            {isComparing ? 'Close Comparison' : 'Compare Career'}
+            <GitCompare className="w-3.5 h-3.5 text-slate-500" />
+            <span>{isComparing ? 'Close Comparison' : 'Compare'}</span>
           </button>
+
           <button
-            onClick={() => navigate('/gap-analysis')}
-            className="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all"
+            type="button"
+            onClick={() => navigate('/profile')}
+            className="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
           >
-            Analyze My Skill Gap <ArrowRight className="w-3.5 h-3.5" />
+            <span>Next: Add My Skills</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
@@ -640,6 +678,32 @@ export default function CareerIntelligence() {
               })}
             </tbody>
           </table>
+        </div>
+      </div>
+
+      {/* Next Step in 5-Step Journey Banner */}
+      <div className="bg-gradient-to-r from-teal-700 via-teal-600 to-emerald-600 rounded-3xl p-6 sm:p-8 text-white shadow-lg flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="space-y-1.5 text-center sm:text-left">
+          <span className="text-xs font-bold uppercase tracking-wider text-teal-200">
+            Next Step in Your Journey
+          </span>
+          <h3 className="text-xl font-extrabold text-white">
+            Ready to see how your current skills match this career?
+          </h3>
+          <p className="text-xs text-teal-100 max-w-xl">
+            Upload your PDF/Word résumé or add skills manually in Step 2. Then proceed to Step 3 to see your skill gap analysis.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3 shrink-0">
+          <button
+            type="button"
+            onClick={() => navigate('/profile')}
+            className="px-5 py-3 bg-white hover:bg-slate-50 text-teal-800 font-extrabold rounded-2xl text-xs shadow-md transition-all flex items-center gap-2 cursor-pointer"
+          >
+            <span>Proceed to Step 2: Add Skills & Résumé</span>
+            <ArrowRight className="w-4 h-4 text-teal-700" />
+          </button>
         </div>
       </div>
     </div>

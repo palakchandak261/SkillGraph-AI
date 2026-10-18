@@ -14,10 +14,12 @@ import {
   ShieldAlert,
   GraduationCap,
   Briefcase,
+  FileText,
 } from 'lucide-react';
 import { searchCareers } from '../services/api';
 import type { CareerSearchItem } from '../types';
 import { useStudent } from '../context/StudentContext';
+import ResumeUploadModal from '../components/ResumeUploadModal';
 
 const EXAMPLE_CAREERS = [
   'Data Scientist',
@@ -39,6 +41,7 @@ export default function Home() {
   const [suggestions, setSuggestions] = useState<CareerSearchItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
 
   useEffect(() => {
     if (!searchQuery.trim()) {
@@ -167,20 +170,23 @@ export default function Home() {
           </div>
 
           {/* Quick Popular Career Chips */}
-          <div className="pt-2">
-            <span className="text-xs text-slate-400 block mb-2 font-medium">
-              Popular careers to explore with 1 click:
-            </span>
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              {EXAMPLE_CAREERS.map((title) => (
-                <button
-                  key={title}
-                  onClick={() => handleSelectQuickChip(title)}
-                  className="px-3 py-1 bg-white/5 hover:bg-teal-500/20 hover:border-teal-400/50 text-slate-300 hover:text-white border border-white/10 rounded-full text-xs font-medium transition-all cursor-pointer"
-                >
-                  {title}
-                </button>
-              ))}
+          {/* Live Data Trust Stats Bar */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-white/10 text-center">
+            <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+              <div className="text-xl sm:text-2xl font-black text-teal-300">1,016</div>
+              <div className="text-[11px] text-slate-300 font-medium mt-0.5">Verified Occupations</div>
+            </div>
+            <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+              <div className="text-xl sm:text-2xl font-black text-blue-300">8,828</div>
+              <div className="text-[11px] text-slate-300 font-medium mt-0.5">Extracted Skills</div>
+            </div>
+            <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+              <div className="text-xl sm:text-2xl font-black text-emerald-300">1,000</div>
+              <div className="text-[11px] text-slate-300 font-medium mt-0.5">Real Job Postings</div>
+            </div>
+            <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+              <div className="text-xl sm:text-2xl font-black text-amber-300">100%</div>
+              <div className="text-[11px] text-slate-300 font-medium mt-0.5">In-Memory Privacy</div>
             </div>
           </div>
         </div>
@@ -188,47 +194,109 @@ export default function Home() {
 
       {/* Two Clear Starting Paths for Any User */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div
-          onClick={() => navigate('/careers')}
-          className="bg-white border-2 border-slate-200 hover:border-teal-500 rounded-3xl p-8 shadow-xs hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between group"
-        >
+        {/* Path 1: Explore Dream Roles */}
+        <div className="bg-white border-2 border-slate-200 hover:border-teal-500 rounded-3xl p-7 shadow-xs hover:shadow-lg transition-all flex flex-col justify-between group">
           <div className="space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center group-hover:bg-teal-600 group-hover:text-white transition-colors">
-              <Compass className="w-6 h-6" />
+            <div className="flex items-center justify-between">
+              <div className="w-12 h-12 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center group-hover:bg-teal-600 group-hover:text-white transition-colors">
+                <Compass className="w-6 h-6" />
+              </div>
+              <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-teal-50 text-teal-700 border border-teal-200 uppercase tracking-wider">
+                Path 1 · Career First
+              </span>
             </div>
+
             <div>
-              <span className="text-xs font-bold text-teal-600 uppercase tracking-wider block mb-1">Path 1</span>
-              <h2 className="text-xl font-bold text-slate-900">I have a dream job in mind</h2>
+              <h2 className="text-xl font-bold text-slate-900 group-hover:text-teal-700 transition-colors">
+                I have a dream job in mind
+              </h2>
+              <p className="text-sm text-slate-600 leading-relaxed mt-1">
+                Explore any of 1,000+ job roles to see real salary ranges, whether jobs are growing, and the exact skills companies require.
+              </p>
             </div>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Explore 1,000+ job roles to see real salary ranges, whether jobs are growing, and the exact skills companies ask for.
-            </p>
+
+            <div className="space-y-2 pt-2 border-t border-slate-100 text-xs text-slate-600">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+                <span>Search 1,016 O*NET and ESCO occupations</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+                <span>See real monthly posting counts & forecast intervals</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+                <span>Discover core vs. emerging technical competencies</span>
+              </div>
+            </div>
           </div>
-          <div className="pt-6 flex items-center gap-2 text-sm font-bold text-teal-600 group-hover:text-teal-700">
-            <span>Explore 1,000+ Careers</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+
+          <div className="pt-6">
+            <button
+              type="button"
+              onClick={() => navigate('/careers')}
+              className="w-full py-3 px-4 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-2xl text-xs shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>Explore 1,000+ Careers</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
           </div>
         </div>
 
-        <div
-          onClick={() => navigate('/profile')}
-          className="bg-white border-2 border-slate-200 hover:border-teal-500 rounded-3xl p-8 shadow-xs hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between group"
-        >
+        {/* Path 2: Skills & Resume First */}
+        <div className="bg-white border-2 border-slate-200 hover:border-indigo-500 rounded-3xl p-7 shadow-xs hover:shadow-lg transition-all flex flex-col justify-between group">
           <div className="space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-              <Brain className="w-6 h-6" />
+            <div className="flex items-center justify-between">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                <Brain className="w-6 h-6" />
+              </div>
+              <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 uppercase tracking-wider">
+                Path 2 · Skills First
+              </span>
             </div>
+
             <div>
-              <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider block mb-1">Path 2</span>
-              <h2 className="text-xl font-bold text-slate-900">I want to see what jobs fit my skills</h2>
+              <h2 className="text-xl font-bold text-slate-900 group-hover:text-indigo-700 transition-colors">
+                I want to see what jobs fit my skills
+              </h2>
+              <p className="text-sm text-slate-600 leading-relaxed mt-1">
+                Upload your résumé or add your skills in seconds. We match your profile against real job postings to calculate your match score.
+              </p>
             </div>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Add the skills you already have or paste your résumé in 5 seconds. We'll show you the jobs you can apply for right now.
-            </p>
+
+            <div className="space-y-2 pt-2 border-t border-slate-100 text-xs text-slate-600">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+                <span>Instant PDF & Word document parser (.pdf, .docx, .txt)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+                <span>Zero data retention — your résumé is never saved to disk</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+                <span>Get a prioritized skill gap list and customized learning plan</span>
+              </div>
+            </div>
           </div>
-          <div className="pt-6 flex items-center gap-2 text-sm font-bold text-indigo-600 group-hover:text-indigo-700">
-            <span>Add My Skills or Paste Résumé</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+
+          <div className="pt-6 space-y-2">
+            <button
+              type="button"
+              onClick={() => setIsResumeModalOpen(true)}
+              className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-bold rounded-2xl text-xs shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <FileText className="w-4 h-4" />
+              <span>Upload Résumé (PDF / Word)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate('/profile')}
+              className="w-full py-2 px-4 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <span>Or Pick Skills Manually</span>
+              <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+            </button>
           </div>
         </div>
       </section>
@@ -351,6 +419,16 @@ export default function Home() {
           </p>
         </div>
       </section>
+
+      {/* Résumé Upload Modal */}
+      <ResumeUploadModal
+        isOpen={isResumeModalOpen}
+        onClose={() => setIsResumeModalOpen(false)}
+        onSkillsApplied={(count) => {
+          setIsResumeModalOpen(false);
+          navigate('/profile');
+        }}
+      />
     </div>
   );
 }
