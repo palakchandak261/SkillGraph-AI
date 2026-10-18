@@ -6,50 +6,33 @@ import {
   Brain,
   Target,
   Milestone,
+  Briefcase,
+  Sliders,
+  FolderGit2,
   Shuffle,
+  BarChart2,
   Network,
-  Trophy,
-  LayoutDashboard,
-  Database,
-  FlaskConical,
-  Settings,
   ChevronLeft,
   ChevronRight,
   Sparkles,
-  ArrowRight,
-  BarChart2,
-  Briefcase,
-  Radar,
-  Sliders,
-  GitFork,
-  FolderGit2,
-  ShieldCheck,
 } from 'lucide-react';
 import { useStudent } from '../context/StudentContext';
 
-const studentNavItems = [
+const mainNavItems = [
   { to: '/', icon: Home, label: 'Home' },
-  { to: '/dashboard', icon: BarChart2, label: 'Market Dashboard' },
-  { to: '/careers', icon: Compass, label: 'Explore Careers' },
-  { to: '/profile', icon: Brain, label: 'My Skills' },
-  { to: '/gap-analysis', icon: Target, label: 'Skill Gap & Résumé' },
-  { to: '/roadmap', icon: Milestone, label: 'Learning Roadmap' },
-  { to: '/opportunities', icon: Briefcase, label: 'Opportunity Matcher' },
-  { to: '/simulator', icon: Sliders, label: 'What-If Simulator' },
-  { to: '/transferable', icon: GitFork, label: 'Transferable Skills' },
-  { to: '/projects', icon: FolderGit2, label: 'AI Project Generator' },
-  { to: '/future-radar', icon: Radar, label: 'Future Skill Radar' },
-  { to: '/alternatives', icon: Shuffle, label: 'Career Alternatives' },
-  { to: '/graph', icon: Network, label: 'Career Graph' },
-  { to: '/progress', icon: Trophy, label: 'My Progress' },
+  { to: '/careers', icon: Compass, label: '1. Explore Careers' },
+  { to: '/profile', icon: Brain, label: '2. My Skills & Résumé' },
+  { to: '/gap-analysis', icon: Target, label: '3. Skill Gap Analysis' },
+  { to: '/roadmap', icon: Milestone, label: '4. Learning Roadmap' },
+  { to: '/opportunities', icon: Briefcase, label: '5. Matching Jobs' },
 ];
 
-const systemNavItems = [
-  { to: '/system/admin', icon: ShieldCheck, label: 'Data Quality & Admin' },
-  { to: '/system/overview', icon: LayoutDashboard, label: 'System Overview' },
-  { to: '/system/data', icon: Database, label: 'Data Provenance' },
-  { to: '/system/pipeline', icon: Settings, label: 'Pipeline Telemetry' },
-  { to: '/system/evaluation', icon: FlaskConical, label: 'Model Benchmarks' },
+const toolNavItems = [
+  { to: '/simulator', icon: Sliders, label: 'What-If Simulator' },
+  { to: '/projects', icon: FolderGit2, label: 'AI Project Ideas' },
+  { to: '/alternatives', icon: Shuffle, label: 'Career Alternatives' },
+  { to: '/dashboard', icon: BarChart2, label: 'Market Trends' },
+  { to: '/graph', icon: Network, label: 'Career Graph' },
 ];
 
 export default function Layout() {
@@ -68,9 +51,9 @@ export default function Layout() {
         {/* Brand Logo */}
         <div
           onClick={() => navigate('/')}
-          className="h-16 flex items-center px-4 border-b border-slate-100 cursor-pointer"
+          className="h-16 flex items-center px-4 border-b border-slate-100 cursor-pointer hover:bg-slate-50/50 transition-colors"
         >
-          <div className="p-1.5 rounded-xl bg-teal-600 text-white shrink-0 shadow-xs">
+          <div className="p-2 rounded-xl bg-teal-600 text-white shrink-0 shadow-xs">
             <Sparkles className="w-5 h-5" />
           </div>
           {!collapsed && (
@@ -79,7 +62,7 @@ export default function Layout() {
                 SkillGraph <span className="text-teal-600">AI</span>
               </span>
               <span className="text-[10px] text-slate-400 font-medium block">
-                Career Intelligence Platform
+                Simple Career Guide
               </span>
             </div>
           )}
@@ -87,40 +70,40 @@ export default function Layout() {
 
         {/* Navigation list */}
         <nav className="flex-1 py-4 px-2 space-y-6 overflow-y-auto">
-          {/* Primary Student Journey Section */}
+          {/* Main 5-Step Journey Section */}
           <div className="space-y-1">
             {!collapsed && (
-              <span className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
-                Career Journey
+              <span className="px-3 text-[10px] font-bold text-teal-700 uppercase tracking-wider block mb-1">
+                Your 5-Step Journey
               </span>
             )}
-            {studentNavItems.map((item) => (
+            {mainNavItems.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
                 end={item.to === '/'}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                  `flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                     isActive
-                      ? 'bg-teal-50 text-teal-800 shadow-2xs font-bold'
-                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                      ? 'bg-teal-600 text-white shadow-xs font-bold'
+                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                   }`
                 }
               >
-                <item.icon className="w-4 h-4 shrink-0 text-slate-500" />
+                <item.icon className="w-4 h-4 shrink-0" />
                 {!collapsed && <span className="whitespace-nowrap">{item.label}</span>}
               </NavLink>
             ))}
           </div>
 
-          {/* Secondary System & Transparency Section */}
+          {/* Smart Tools Section */}
           <div className="space-y-1 pt-4 border-t border-slate-100">
             {!collapsed && (
               <span className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
-                System & Data Insights
+                Explore & Smart Tools
               </span>
             )}
-            {systemNavItems.map((item) => (
+            {toolNavItems.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}

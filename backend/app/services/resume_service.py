@@ -140,5 +140,69 @@ class ResumeParserService:
             ),
         }
 
+    def extract_from_file_bytes(
+        self,
+        db: Session,
+        file_bytes: bytes,
+        filename: str,
+        user_experience_hint: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Extract text from PDF, DOCX, DOC, or TXT file bytes and parse competencies.
+        Guarantees zero persistent storage of the uploaded file.
+        """
+        lower_name = filename.lower()
+        extracted_text = ""
+
+        # 1. PDF extraction
+        if lower_name.endswith(".pdf"):
+            try:
+                import io
+                import pypdf
+                reader = pypdf.PdfReader(io.BytesIO(file_bytes))
+                pages_text = []
+                for p in reader.pages:
+                    txt = p.extract_text()
+                    if txt:
+                        pages_text.append(txt)
+                extracted_text = "\n".join(pages_text)
+            except Exception as e:
+                logger.warning(f"Error parsing PDF with pypdf: {e}")
+                extracted_text = re.sub(r"[^\x20-\x7E\n]", " ", file_bytes.decode("latin-1", errors="ignore"))
+
+        # 2. DOCX extraction
+        elif lower_name.endswith(".docx"):
+            try:
+                import io
+                import docx
+                doc = docx.Document(io.BytesIO(file_bytes))
+                paragraphs = [p.text for p in doc.paragraphs if p.text]
+                for table in doc.tables:
+                    for row in table.rows:
+                        paragraphs.extend(cell.text for cell in row.cells if cell.text)
+                extracted_text = "\n".join(paragraphs)
+            except Exception as e:
+                logger.warning(f"Error parsing DOCX with python-docx: {e}")
+                extracted_text = re.sub(r"[^\x20-\x7E\n]", " ", file_bytes.decode("latin-1", errors="ignore"))
+
+        # 3. DOC (legacy binary Word) or fallback
+        elif lower_name.endswith(".doc"):
+            try:
+                text_stream = file_bytes.decode("utf-8", errors="ignore")
+                extracted_text = re.sub(r"[\x00-\x08\x0B\x0C\x0E-\x1F]", " ", text_stream)
+            except Exception:
+                extracted_text = re.sub(r"[^\x20-\x7E\n]", " ", file_bytes.decode("latin-1", errors="ignore"))
+
+        # 4. Plain text / Markdown
+        else:
+            try:
+                extracted_text = file_bytes.decode("utf-8")
+            except UnicodeDecodeError:
+                extracted_text = file_bytes.decode("latin-1", errors="ignore")
+
+        res = self.extract_from_text(db, text=extracted_text, user_experience_hint=user_experience_hint)
+        res["source_filename"] = filename
+        return res
+
 
 resume_service = ResumeParserService()

@@ -14,10 +14,31 @@ import {
   Save,
   GraduationCap,
   Layers,
+  FileText,
+  Upload,
+  X,
+  ShieldCheck,
+  Zap,
 } from 'lucide-react';
 import { useStudent } from '../context/StudentContext';
 import { searchSkills, searchCareers, saveStudentProfile } from '../services/api';
 import type { Skill, CareerSearchItem, StudentSkillItem } from '../types';
+import ResumeUploadModal from '../components/ResumeUploadModal';
+
+const POPULAR_SKILLS = [
+  'Python',
+  'SQL',
+  'JavaScript',
+  'React',
+  'Git',
+  'Docker',
+  'Machine Learning',
+  'Data Analysis',
+  'AWS',
+  'Problem Solving',
+  'Communication',
+  'Project Management',
+];
 
 export default function SkillsProfile() {
   const navigate = useNavigate();
@@ -48,6 +69,7 @@ export default function SkillsProfile() {
   // Education level
   const [educationLevel, setEducationLevel] = useState('Undergraduate Degree');
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
 
   // Search skills autocomplete
   useEffect(() => {
@@ -137,25 +159,28 @@ export default function SkillsProfile() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs font-bold text-teal-600 uppercase tracking-wider">Step 3 of Journey</span>
-          <h1 className="text-2xl font-extrabold text-slate-900 mt-0.5">My Skills Profile</h1>
+          <span className="text-xs font-bold text-teal-600 uppercase tracking-wider">Step 2 of 5: My Skills</span>
+          <h1 className="text-2xl font-extrabold text-slate-900 mt-0.5">My Skills & Résumé</h1>
           <p className="text-xs text-slate-500">
-            Define your current competencies, practical proficiency levels, and dream career.
+            Tell us what you know. Add skills manually or upload your résumé (PDF / Word) in seconds.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
-            onClick={handleSaveToBackend}
-            className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            type="button"
+            onClick={() => setIsResumeModalOpen(true)}
+            className="px-4 py-2 bg-gradient-to-r from-teal-600 to-indigo-600 hover:from-teal-500 hover:to-indigo-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-xs transition-all cursor-pointer"
           >
-            <Save className="w-4 h-4 text-slate-500" /> Save Profile
+            <Upload className="w-4 h-4" />
+            <span>Upload Résumé (PDF / Word)</span>
           </button>
           <button
             onClick={() => navigate('/gap-analysis')}
-            className="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all"
+            className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
           >
-            Analyze Skill Gap <ArrowRight className="w-3.5 h-3.5" />
+            <span>Analyze Skill Gap</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
@@ -323,6 +348,43 @@ export default function SkillsProfile() {
           )}
         </div>
 
+        {/* 1-Click Popular Skills */}
+        <div className="pt-1">
+          <span className="text-[11px] font-semibold text-slate-500 block mb-1.5">
+            Quick Add Popular Skills:
+          </span>
+          <div className="flex flex-wrap gap-1.5">
+            {POPULAR_SKILLS.map((name) => {
+              const isAdded = studentSkills.some(
+                (s) => s.skill_name.toLowerCase() === name.toLowerCase()
+              );
+              return (
+                <button
+                  key={name}
+                  type="button"
+                  disabled={isAdded}
+                  onClick={() => {
+                    if (!isAdded) {
+                      addSkill({
+                        skill_name: name,
+                        proficiency: 'intermediate',
+                        is_custom: false,
+                      });
+                    }
+                  }}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+                    isAdded
+                      ? 'bg-teal-50 text-teal-700 border border-teal-200 cursor-default opacity-80'
+                      : 'bg-slate-100 hover:bg-teal-50 hover:text-teal-700 text-slate-700 border border-slate-200'
+                  }`}
+                >
+                  {isAdded ? `✓ ${name}` : `+ ${name}`}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Add Custom Skill Form */}
         <form onSubmit={handleAddCustomSkill} className="flex items-center gap-2 pt-1">
           <input
@@ -399,6 +461,28 @@ export default function SkillsProfile() {
         </div>
       </div>
 
+      {/* Next Step CTA */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-6 bg-gradient-to-r from-teal-50 to-indigo-50 border border-teal-200/80 rounded-3xl shadow-xs">
+        <div>
+          <span className="text-xs font-bold text-teal-700 uppercase tracking-wider block mb-0.5">Ready for the next step?</span>
+          <h3 className="font-bold text-slate-900 text-sm">
+            {targetCareer
+              ? `Check your match for ${targetCareer.title}`
+              : 'Analyze your skills against your dream career'}
+          </h3>
+          <p className="text-xs text-slate-500 mt-0.5">
+            You currently have {studentSkills.length} skills in your profile.
+          </p>
+        </div>
+        <button
+          onClick={() => navigate('/gap-analysis')}
+          className="px-6 py-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-md transition-all cursor-pointer whitespace-nowrap"
+        >
+          <span>Continue to Step 3: Skill Gap</span>
+          <ArrowRight className="w-4 h-4" />
+        </button>
+      </div>
+
       {/* Disclaimers & Methodology Note */}
       <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-slate-500 space-y-1">
         <p className="font-semibold text-slate-700">Self-Reported Proficiency Transparency</p>
@@ -407,6 +491,12 @@ export default function SkillsProfile() {
           Beginner skills receive fractional weighting during skill gap coverage calculation to encourage practical depth.
         </p>
       </div>
+
+      {/* Résumé Upload / Paste Modal */}
+      <ResumeUploadModal
+        isOpen={isResumeModalOpen}
+        onClose={() => setIsResumeModalOpen(false)}
+      />
     </div>
   );
 }

@@ -190,6 +190,19 @@ def test_resume_parser():
     assert "privacy_notice" in data
 
 
+def test_resume_upload_file():
+    """Verify upload of résumé file (text, docx, pdf)."""
+    content = b"Data Scientist proficient in Python, SQL, Machine Learning, and Data Analysis."
+    files = {"file": ("resume.txt", content, "text/plain")}
+    resp = client.post("/api/resume/upload", files=files)
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "extracted_skills" in data
+    assert data["total_skills_found"] >= 2
+    names = [s["skill_name"].lower() for s in data["extracted_skills"]]
+    assert "python" in names
+
+
 def test_market_dashboard():
     """Verify Market Intelligence Dashboard macro analytics."""
     resp = client.get("/api/market/dashboard")

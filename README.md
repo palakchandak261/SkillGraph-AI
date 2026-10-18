@@ -4,7 +4,7 @@
 [![React](https://img.shields.io/badge/Frontend-React_18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/Language-TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/Tests-55%20Passed-success)](#automated-testing)
+[![Tests](https://img.shields.io/badge/Tests-56%20Passed-success)](#automated-testing)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > **"Discover your dream career, understand its market demand, identify your skill gaps, and explore the career opportunities your skills can unlock."**
@@ -32,10 +32,9 @@ SkillGraph AI delivers a complete, full-stack, data-driven experience designed t
 5. **AI Portfolio Project Generator & Learning ROI Optimizer (`/projects`)**:
    - Generates tailored, production-ready portfolio project briefs that target multiple missing skills simultaneously.
    - Prioritizes learning paths using a composite ROI model (Market Demand $\times$ Cross-Role Versatility $\div$ Time-to-Learn).
-6. **Instant Résumé Skill Extraction Modal (`/gap-analysis`)**:
-   - Zero-retention inverted-index regex parser that extracts standardized skills from raw résumé text in under 10ms with zero PII persistence.
-7. **Labor Market Intelligence & Confidence Monitor (`/system/admin`)**:
-   - Live audit telemetry tracking Market Confidence Scores (0-100), duplicate rates, extraction coverage, and modular data provider statuses (ESCO, Adzuna, O*NET, JSearch).
+6. **Instant Résumé Parser with PDF & Word Upload (`/profile` & `/gap-analysis`)**:
+   - Zero-retention document parser supporting **PDF (`.pdf`)**, **Word (`.docx`, `.doc`)**, and text formats.
+   - Extracts standardized competencies with context snippets and proficiency inference in under 50ms with zero PII retention.
 
 ---
 

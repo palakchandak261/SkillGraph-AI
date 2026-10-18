@@ -75,10 +75,10 @@ export default function OpportunityMatcher() {
         <div className="relative z-10 max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-semibold mb-4 border border-teal-500/30">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Real Job-Market Evidence Matching</span>
+            <span>Step 5 of 5: Matching Jobs</span>
           </div>
           <h1 className="text-3xl font-extrabold tracking-tight mb-2">
-            Opportunity Matcher
+            Opportunity Matcher & Live Jobs
           </h1>
           <p className="text-slate-300 text-sm leading-relaxed mb-6">
             Explore verified job postings matched against your {studentSkills.length} declared skills.

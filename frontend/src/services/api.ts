@@ -174,6 +174,19 @@ export const parseResumeText = (payload: {
   experience_level_hint?: string;
 }) => api.post<import('../types').ResumeParseResponse>('/resume/parse', payload);
 
+export const uploadResumeFile = (file: File, experienceLevelHint?: string) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  if (experienceLevelHint) {
+    formData.append('experience_level_hint', experienceLevelHint);
+  }
+  return api.post<import('../types').ResumeParseResponse>('/resume/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
 // -----------------------------------------------------------------------------
 // Market Intelligence & Admin Data Quality
 // -----------------------------------------------------------------------------

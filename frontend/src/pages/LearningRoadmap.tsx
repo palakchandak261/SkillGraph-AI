@@ -86,7 +86,7 @@ export default function LearningRoadmap() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs font-bold text-teal-600 uppercase tracking-wider">Step 5 of Journey</span>
+          <span className="text-xs font-bold text-teal-600 uppercase tracking-wider">Step 4 of 5: Learning Roadmap</span>
           <h1 className="text-2xl font-extrabold text-slate-900 mt-0.5">
             Personalized Learning Roadmap
           </h1>
@@ -96,10 +96,10 @@ export default function LearningRoadmap() {
         </div>
 
         <button
-          onClick={() => navigate('/alternatives')}
-          className="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all"
+          onClick={() => navigate('/opportunities')}
+          className="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
         >
-          Explore Career Mobility <ArrowRight className="w-3.5 h-3.5" />
+          <span>See Matching Jobs (Step 5)</span> <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </div>
 
@@ -235,6 +235,26 @@ export default function LearningRoadmap() {
             )}
           </div>
         ))}
+      </div>
+
+      {/* Step 5 Next CTA */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-6 bg-gradient-to-r from-teal-50 to-indigo-50 border border-teal-200/80 rounded-3xl shadow-xs">
+        <div>
+          <span className="text-xs font-bold text-teal-700 uppercase tracking-wider block mb-0.5">Ready to find real jobs?</span>
+          <h3 className="font-bold text-slate-900 text-sm">
+            See live job postings matching your current skills.
+          </h3>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Explore 1,000 real openings with salary ranges and direct application links.
+          </p>
+        </div>
+        <button
+          onClick={() => navigate('/opportunities')}
+          className="px-6 py-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-md transition-all cursor-pointer whitespace-nowrap"
+        >
+          <span>Continue to Step 5: Matching Jobs</span>
+          <ArrowRight className="w-4 h-4" />
+        </button>
       </div>
     </div>
   );

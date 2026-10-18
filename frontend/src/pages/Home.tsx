@@ -93,19 +93,18 @@ export default function Home() {
         <div className="relative max-w-3xl mx-auto text-center space-y-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-semibold tracking-wide uppercase">
             <Sparkles className="w-3.5 h-3.5" />
-            Empirical Career Skill Intelligence
+            Simple AI Career Guide
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
-            Your Dream Career. <br />
+            Find Your Dream Job & <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-teal-200 to-blue-300">
-              Your Skills. Your Next Move.
+              The Skills to Get Hired
             </span>
           </h1>
 
           <p className="text-base sm:text-lg text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto">
-            Discover which careers are growing, find the skills employers actually require, and build
-            an evidence-backed roadmap toward your future.
+            See exactly what skills employers want, find out what you are missing, and follow a clear step-by-step plan to reach your career goals.
           </p>
 
           {/* Autocomplete Career Search Field */}
@@ -120,7 +119,7 @@ export default function Home() {
                   setShowDropdown(true);
                 }}
                 onFocus={() => setShowDropdown(true)}
-                placeholder="Search dream career (e.g. Data Scientist, Cloud Engineer)..."
+                placeholder="Search any job title (e.g. Data Scientist, Web Developer, Designer)..."
                 className="w-full pl-12 pr-28 py-4 bg-white/10 hover:bg-white/15 focus:bg-white text-slate-100 focus:text-slate-900 placeholder-slate-400 border border-white/20 focus:border-teal-500 rounded-2xl text-sm font-medium shadow-lg backdrop-blur-md transition-all focus:outline-none focus:ring-4 focus:ring-teal-500/20"
               />
               <button
@@ -129,9 +128,9 @@ export default function Home() {
                   if (suggestions.length > 0) handleSelectCareer(suggestions[0]);
                   else navigate(`/careers?q=${encodeURIComponent(searchQuery)}`);
                 }}
-                className="absolute right-2 px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white text-xs font-semibold rounded-xl shadow-md transition-all flex items-center gap-1.5"
+                className="absolute right-2 px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white text-xs font-semibold rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
               >
-                Explore <ArrowRight className="w-3.5 h-3.5" />
+                Search <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
 
@@ -145,7 +144,7 @@ export default function Home() {
                       handleSelectCareer(item);
                       setShowDropdown(false);
                     }}
-                    className="w-full px-4 py-3 text-left hover:bg-slate-50 transition-colors flex items-start justify-between gap-3"
+                    className="w-full px-4 py-3 text-left hover:bg-slate-50 transition-colors flex items-start justify-between gap-3 cursor-pointer"
                   >
                     <div>
                       <div className="flex items-center gap-2">
@@ -167,38 +166,69 @@ export default function Home() {
             )}
           </div>
 
-          {/* Action CTAs */}
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-            <button
-              onClick={() => navigate('/careers')}
-              className="px-6 py-3.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-semibold text-sm shadow-md transition-all flex items-center gap-2"
-            >
-              <Compass className="w-4 h-4" /> Explore My Dream Career
-            </button>
-            <button
-              onClick={() => navigate('/profile')}
-              className="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-sm border border-white/20 backdrop-blur-sm transition-all flex items-center gap-2"
-            >
-              <Brain className="w-4 h-4 text-teal-300" /> Discover Careers That Match My Skills
-            </button>
-          </div>
-
-          {/* Quick Examples */}
-          <div className="pt-4">
+          {/* Quick Popular Career Chips */}
+          <div className="pt-2">
             <span className="text-xs text-slate-400 block mb-2 font-medium">
-              Explore Popular Real Careers Derived from Datasets:
+              Popular careers to explore with 1 click:
             </span>
             <div className="flex flex-wrap items-center justify-center gap-2">
               {EXAMPLE_CAREERS.map((title) => (
                 <button
                   key={title}
                   onClick={() => handleSelectQuickChip(title)}
-                  className="px-3 py-1 bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 rounded-full text-xs font-medium transition-all"
+                  className="px-3 py-1 bg-white/5 hover:bg-teal-500/20 hover:border-teal-400/50 text-slate-300 hover:text-white border border-white/10 rounded-full text-xs font-medium transition-all cursor-pointer"
                 >
                   {title}
                 </button>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Two Clear Starting Paths for Any User */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div
+          onClick={() => navigate('/careers')}
+          className="bg-white border-2 border-slate-200 hover:border-teal-500 rounded-3xl p-8 shadow-xs hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between group"
+        >
+          <div className="space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center group-hover:bg-teal-600 group-hover:text-white transition-colors">
+              <Compass className="w-6 h-6" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-teal-600 uppercase tracking-wider block mb-1">Path 1</span>
+              <h2 className="text-xl font-bold text-slate-900">I have a dream job in mind</h2>
+            </div>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              Explore 1,000+ job roles to see real salary ranges, whether jobs are growing, and the exact skills companies ask for.
+            </p>
+          </div>
+          <div className="pt-6 flex items-center gap-2 text-sm font-bold text-teal-600 group-hover:text-teal-700">
+            <span>Explore 1,000+ Careers</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </div>
+
+        <div
+          onClick={() => navigate('/profile')}
+          className="bg-white border-2 border-slate-200 hover:border-teal-500 rounded-3xl p-8 shadow-xs hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between group"
+        >
+          <div className="space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+              <Brain className="w-6 h-6" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider block mb-1">Path 2</span>
+              <h2 className="text-xl font-bold text-slate-900">I want to see what jobs fit my skills</h2>
+            </div>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              Add the skills you already have or paste your résumé in 5 seconds. We'll show you the jobs you can apply for right now.
+            </p>
+          </div>
+          <div className="pt-6 flex items-center gap-2 text-sm font-bold text-indigo-600 group-hover:text-indigo-700">
+            <span>Add My Skills or Paste Résumé</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
       </section>
@@ -272,54 +302,52 @@ export default function Home() {
       {/* Primary User Journey Workflow: 7 Steps */}
       <section className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xs space-y-6">
         <div>
-          <span className="text-xs font-bold text-teal-600 tracking-wider uppercase">Your Guided Roadmap</span>
+          <span className="text-xs font-bold text-teal-600 tracking-wider uppercase">How It Works</span>
           <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mt-1">
-            The 7-Step Career Intelligence Journey
+            Your Simple 5-Step Career Path
           </h2>
           <p className="text-xs text-slate-500">
-            From discovering your target career to building a portfolio that proves your capabilities.
+            A clear, straightforward process from discovering your dream role to landing your next job.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {[
-            { step: '01', title: 'Discover Career', desc: 'Search or select your dream job using normalized title matching.', to: '/careers' },
-            { step: '02', title: 'Examine Demand', desc: 'Inspect market volume, verified employer count, and monthly trends.', to: '/careers' },
-            { step: '03', title: 'Input Skills', desc: 'Select recognized skills or enter custom proficiencies in your profile.', to: '/profile' },
-            { step: '04', title: 'Analyze Skill Gap', desc: 'Calculate transparent skill coverage and identify high-leverage gaps.', to: '/gap-analysis' },
-            { step: '05', title: 'Follow Roadmap', desc: 'Follow a phased learning progression with practical portfolio ideas.', to: '/roadmap' },
-            { step: '06', title: 'Explore Graph', desc: 'Navigate the interactive career-skill topology to see role relationships.', to: '/graph' },
-            { step: '07', title: 'Discover Alternatives', desc: 'Compare related occupations that share your skill foundations.', to: '/alternatives' },
+            { step: '01', title: '1. Explore Careers', desc: 'Pick your dream job and see what skills employers are asking for.', to: '/careers' },
+            { step: '02', title: '2. Add Your Skills', desc: 'Add skills or paste your résumé in 5 seconds to build your profile.', to: '/profile' },
+            { step: '03', title: '3. Skill Gap Analysis', desc: 'See your match percentage and find out which key skills you need.', to: '/gap-analysis' },
+            { step: '04', title: '4. Learning Roadmap', desc: 'Follow a phased plan with practical project ideas to build your skills.', to: '/roadmap' },
+            { step: '05', title: '5. Matching Jobs', desc: 'Explore live jobs matching your abilities and apply directly.', to: '/opportunities' },
           ].map((s) => (
             <div
               key={s.step}
               onClick={() => navigate(s.to)}
-              className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 hover:border-teal-300 hover:bg-teal-50/30 transition-all cursor-pointer group"
+              className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 hover:border-teal-300 hover:bg-teal-50/30 transition-all cursor-pointer group flex flex-col justify-between"
             >
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono font-bold text-teal-600 bg-teal-100/70 px-2 py-0.5 rounded-md">
-                  Step {s.step}
-                </span>
-                <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-teal-600 group-hover:translate-x-0.5 transition-all" />
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-mono font-bold text-teal-600 bg-teal-100/70 px-2 py-0.5 rounded-md">
+                    Step {s.step}
+                  </span>
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-teal-600 group-hover:translate-x-0.5 transition-all" />
+                </div>
+                <h3 className="font-semibold text-slate-800 text-sm group-hover:text-teal-700 transition-colors">
+                  {s.title}
+                </h3>
+                <p className="text-xs text-slate-500 mt-1">{s.desc}</p>
               </div>
-              <h3 className="font-semibold text-slate-800 text-sm group-hover:text-teal-700 transition-colors">
-                {s.title}
-              </h3>
-              <p className="text-xs text-slate-500 mt-1">{s.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Dataset & Methodology Transparency Notice */}
+      {/* Helpful Trust & Guidance Notice */}
       <section className="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex items-start gap-4 text-xs text-slate-600">
-        <ShieldAlert className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" />
+        <Sparkles className="w-5 h-5 text-teal-600 shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <p className="font-semibold text-slate-700">Data Science Integrity & Labor Market Transparency</p>
+          <p className="font-semibold text-slate-800">Real Data, Real Results</p>
           <p>
-            SkillGraph AI analyzes empirical job postings, official O*NET 31.0 occupational profiles, and ESCO classifications.
-            Observed demand reflects the analyzed dataset sample. Skills increase alignment with employer requirements but do not guarantee employment.
-            Statistical forecasts are only displayed when sufficient longitudinal observations are available.
+            SkillGraph AI analyzes real-world job postings and official labor market standards (O*NET and ESCO). Every requirement, salary estimate, and skill recommendation is backed by real employer data to help you make informed, confident career decisions.
           </p>
         </div>
       </section>

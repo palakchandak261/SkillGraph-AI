@@ -25,7 +25,7 @@ import json
 import math
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile, status
 from sqlalchemy import and_, asc, desc, func, or_, text
 from sqlalchemy.orm import Session
 
@@ -1513,6 +1513,22 @@ def parse_resume(
         db,
         text=payload.resume_text,
         user_experience_hint=payload.experience_level_hint,
+    )
+
+
+@router.post("/resume/upload", response_model=ResumeParseResponse, tags=["Résumé Parser"])
+async def upload_resume_file(
+    file: UploadFile = File(...),
+    experience_level_hint: Optional[str] = Form(None),
+    db: Session = Depends(get_db),
+):
+    """Extract candidate competencies from an uploaded PDF, DOCX, DOC, or TXT file."""
+    file_bytes = await file.read()
+    return resume_service.extract_from_file_bytes(
+        db,
+        file_bytes=file_bytes,
+        filename=file.filename or "resume.pdf",
+        user_experience_hint=experience_level_hint,
     )
 
 
